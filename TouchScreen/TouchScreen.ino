@@ -16,8 +16,7 @@ SoftwareSerial espSerial =  SoftwareSerial(0, 1);
 #define DHTPIN 2
 //#define DHTTYPE DHT11
 //DHT dht(DHTPIN, DHTTYPE);
-#define rows 6
-
+#define saiso 20
 
 extern uint8_t BigFont[];
 
@@ -182,8 +181,8 @@ void carController() {
       }
       Serial.print("sent: ");
       Serial.println(signal);
-      signal[0] = '0';
-      send(signal);
+//      signal[0] = '0';
+//      send(signal);
       delay(100);
 
       Clear();
@@ -205,13 +204,17 @@ void autoScreen()
     if (x >= 0 && x <= 10 && y >= 0 && y <= 20)
     {
       myGLCD.clrScr();
+      char signal[20] = "";
+  signal[0]='7';
+  send(signal);
+      Serial.print("sent:7**");
       break;
     }
   }
 
 
 }
-void drawScreen()
+void drawMatrix(int rows)
 {
   float width = 320 / rows;
   float height = 240 / rows;
@@ -223,6 +226,175 @@ void drawScreen()
   }
   myGLCD.setColor(colorlist[2]);
   myGLCD.print("x", 0, 0);
+}
+
+char Direct(long x1, long y1, long x2 , long y2) {
+  long x = x2 - x1;
+  long y = y2 - y1;
+  if (y < 0  && abs(x) < saiso) {
+    return 'b';
+  }
+  if (y > 0  && abs(x) < saiso) {
+    return 'n';
+  }
+  if (x < 0  && abs(y) < saiso) {
+    return 't';
+  }
+  if (x > 0  && abs(y) < saiso) {
+    return 'd';
+  }
+}
+
+
+void drawScreen2()
+{
+  drawMatrix(6);
+  myTouch.read();
+  long firstX ;
+  long firstY ;
+  long secondX;
+  long secondY;
+  bool check = false;
+  char direct = 'b';
+  bool onetime = true;
+
+
+  while (myTouch.dataAvailable() == true || true)
+  {
+    firstX = secondX;
+    firstY = secondY;
+    delay(100);
+    myTouch.read();
+    secondX  = myTouch.getX();
+    secondY = myTouch.getY();
+    if (firstX != -1 && firstY != -1 && secondX != -1 && secondY != -1)
+    {
+      Serial.print("FirstX: ");
+      Serial.println(firstX);
+      Serial.print("FirstY: ");
+      Serial.println(firstY);
+      Serial.println("--------------------------------");
+      if (firstX >= 0 && firstX <= 10 && firstY >= 0 && firstY <= 20)
+      {
+        myGLCD.clrScr();
+        send('7');
+        Serial.println("send: 7");
+        break;
+      }
+      myGLCD.setColor(colorlist[4]);
+      myGLCD.fillCircle(firstX, firstY, 2);
+
+
+      Serial.print("SecondX: ");
+      Serial.println(secondX);
+      Serial.print("SecondY: ");
+      Serial.println(secondY);
+      Serial.println("--------------------------------");
+      //
+      myGLCD.drawLine(secondX, secondY, firstX, firstY);
+      check = true;
+//      if(onetime){
+//        direct =  Direct(firstX, firstY, secondX, secondY);
+//        onetime = false;
+//      }
+      long x = secondX - firstX;
+      long y = secondY - firstY;
+      Serial.println(direct);
+      switch (direct) {
+        case 'd':
+//        send('1');
+//        Serial.println('1');
+          if (abs(y) >= saiso){
+            if(y>0){
+              Serial.println('1');
+              send('1');
+            }
+            else{
+              Serial.println('2');
+              send('2');
+            }
+          }
+          else{
+            Serial.println('3');
+            send('3');
+          }
+            break;
+        case 't':
+//         send('2');
+//        Serial.println('2');
+         if (abs(y) >= saiso){
+            if(y>0){
+              Serial.println('2');
+              send('2');
+            }
+            else{
+              Serial.println('1');
+              send('1');
+            }
+          }
+          else{
+            Serial.println('3');
+            send('3');
+          }
+          break;
+        case 'n':
+         if (abs(x) >= saiso){
+            if(x>0){
+              Serial.println('2');
+              send('2');
+            }
+            else{
+              Serial.println('1');
+              send('1');
+            }
+          }
+          else{
+            Serial.println('3');
+            send('3');
+          }
+          break;
+        case 'b':
+         if (abs(x) >= saiso){
+            if(x>0){
+              Serial.println('1');
+              send('1');
+            }
+            else{
+              Serial.println('2');
+              send('2');
+            }
+          }
+          else{
+            Serial.println('3');
+            send('3');
+          }
+          break;
+      }
+      Serial.println(x);
+      Serial.println(y);
+       direct = Direct(firstX, firstY, secondX, secondY);
+    }
+    else
+    {
+      if (check)
+      {
+        myGLCD.clrScr();
+        drawMatrix(6);
+        check = false;
+      }
+
+    }
+
+    //      delay(3000);
+
+
+
+
+  }
+}
+void drawScreen()
+{
+  drawMatrix(6);
   while (myTouch.dataAvailable() == true || true)
   {
     myTouch.read();
@@ -232,12 +404,18 @@ void drawScreen()
     Serial.println(x);
     Serial.print("BeginY: ");
     Serial.println(y);
+    Serial.println("--------------------------------");
+    //    delay(2000);
+
     if (x != -1 && y != -1)
     {
       if (x >= 0 && x <= 10 && y >= 0 && y <= 20)
       {
         myGLCD.clrScr();
-        send('7');
+       char signal[20] = "";
+  signal[0]='7';
+      myGLCD.clrScr();
+      send(signal);
         Serial.println("send: 7");
         break;
       }
@@ -246,28 +424,40 @@ void drawScreen()
       myGLCD.fillCircle(x, y, 2);
       long firstX = x;
       long firstY = y;
-      long secondX = -1;
-      long secondY = -1;
-      delay(1000);
-      secondX = myTouch.getX();
-      secondY = myTouch.getY();
-
-      if(secondX!=-1 && secondY!=-1)
+      long secondX;
+      long secondY;
+      while (myTouch.dataAvailable() == true || true)
       {
-        Serial.print("FirstX: ");
+        myTouch.read();
+        secondX = myTouch.getX();
+        secondY = myTouch.getY();
+        Serial.print("secondX: ");
+        Serial.println(secondX);
+        Serial.print("secondY: ");
+        Serial.println(secondY);
+        Serial.println("--------------------------------");
+        //        delay(2000);
+        if (secondX != firstX && secondY != firstY && secondX != -1 && secondY != -1)
+        {
+          myGLCD.fillCircle(secondX, secondY, 2);
+
+          break;
+        }
+      }
+      Serial.print("FirstX: ");
       Serial.println(firstX);
       Serial.print("FirstY: ");
       Serial.println(firstY);
-      Serial.print("secondX: ");
-      Serial.println(secondX);
-      Serial.print("secondY: ");
-      Serial.println(secondY);
-      myGLCD.fillCircle(secondX, secondY, 2);
+      Serial.println("--------------------------------");
+
+
+      //
       myGLCD.drawLine(firstX, firstY, secondX, secondY);
-      delay(3000);
-      }
-      
+
+      //      delay(3000);
+
     }
+
 
 
 
@@ -296,13 +486,17 @@ void homeScreen()
     }
     else if (x >= 70 && y >= 20 && y <= 60)
     {
+  char signal[20] = "";
+  signal[0]='6';
       myGLCD.clrScr();
+      send(signal);
+      Serial.print("sent:6");
       autoScreen();
     }
     else if ( x >= 40 && y >= 120 && y <= 150)
     {
       myGLCD.clrScr();
-      drawScreen();
+      drawScreen2();
     }
   }
 }
