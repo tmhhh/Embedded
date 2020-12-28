@@ -66,6 +66,7 @@ void moveRight()
 }
 void Stop()
 {
+  digitalWrite(9, LOW);
   digitalWrite(3, LOW);
   digitalWrite(4, LOW);
   digitalWrite(5, LOW);
@@ -76,7 +77,71 @@ void SpeakerAction()
   digitalWrite(Speaker, HIGH);
 
 }
+void Auto()
+{
+  bool A = false;
+  while (true)
+  {
+    int ScanForward = digitalRead(Sensors1);
+    int ScanLeft = digitalRead(Sensors2);
+    int ScanRight = digitalRead(Sensors3);
 
+
+    int rd;
+    while (ScanForward == 0 && ScanLeft == 0 && ScanRight == 0)
+    {
+      moveForward();
+      Serial.println("move forward");
+      ScanForward = digitalRead(Sensors1);
+      ScanLeft = digitalRead(Sensors2);
+      ScanRight = digitalRead(Sensors3);
+
+
+      if (vw_get_message(msg, &msgLen))
+      {
+        if (msg[0] == '7')
+        {
+          Serial.println("got:7");
+          Serial.println("quit");
+          Stop();
+          A = true;
+          break;
+        }
+      }
+    }
+    if (A)
+    {
+      Stop();
+      break;
+    }
+  
+  rd = random(0, 2);
+  if (rd == 0)
+  {
+    moveDown();
+    delay(500);
+
+    Serial.println("rotateLeft");
+    rotateLeft();
+    delay(500);
+
+    Stop();
+  }
+  else
+  {
+    Serial.println("rotateRight");
+    moveDown();
+    delay(500);
+    rotateRight();
+    delay(500);
+    Stop();
+
+
+  }
+
+}
+
+}
 void Executed(char msg)
 {
   Serial.write("In \n");
@@ -102,63 +167,14 @@ void Executed(char msg)
   {
     SpeakerAction();
   }
-  else if (msg = '6')
+  else if (msg == '6')
   {
     Auto();
   }
-
+  delay(500);
+  Stop();
 }
-void Auto()
-{
-  while (true)
-  {
-    int ScanForward = digitalRead(Sensors1);
-    int ScanLeft = digitalRead(Sensors2);
-    int ScanRight = digitalRead(Sensors3);
 
-
-    int rd;
-    while (ScanForward == 0 && ScanLeft == 0 && ScanRight == 0)
-    {
-      moveForward();
-      Serial.println("move forward");
-      ScanForward = digitalRead(Sensors1);
-      ScanLeft = digitalRead(Sensors2);
-      ScanRight = digitalRead(Sensors3);
-      if(msg[0]=='7')
-      {
-        Serial.println("quit");
-              break;
-      }
-
-    }
-    rd = random(0, 2);
-    if (rd == 0)
-    {
-      moveDown();
-      delay(500);
-
-      Serial.println("rotateLeft");
-      rotateLeft();
-      delay(500);
-
-      Stop();
-    }
-    else
-    {
-      Serial.println("rotateRight");
-      moveDown();
-      delay(500);
-      rotateRight();
-      delay(500);
-      Stop();
-
-
-    }
-
-  }
-
-}
 void loop()
 {
   if (vw_get_message(msg, &msgLen))            // nếu có tín hiệu được truyền đến
@@ -169,7 +185,6 @@ void loop()
     Executed(signal);
 
   }
-
 
 
 }
