@@ -22,14 +22,14 @@ void setup()
   pinMode(Speaker, OUTPUT);
 
 }
-void rotateRight()
+void rotateLeft()
 {
   digitalWrite(3, HIGH);
   digitalWrite(4, LOW);
   digitalWrite(5, LOW);
   digitalWrite(6, HIGH);
 }
-void rotateLeft()
+void rotateRight()
 {
   digitalWrite(3, LOW);
   digitalWrite(4, HIGH);
@@ -144,16 +144,16 @@ void Auto()
 }
 void Executed(char msg)
 {
-  Serial.write("In \n");
-  Serial.write(msg);                     // in ký tự ra màn hình
+  Serial.print("got: ");
+    Serial.println(msg);
 
   if (msg == '1')
   {
-    moveLeft();
+    rotateLeft();
   }
   else if (msg == '2')
   {
-    moveRight();
+    rotateRight();
   }
   else if (msg == '3')
   {
@@ -171,20 +171,26 @@ void Executed(char msg)
   {
     Auto();
   }
-  delay(500);
-  Stop();
+  else if(msg=='0')
+  {
+  Stop();   
+  }
+//  delay(1000);  
+ 
 }
 
 void loop()
 {
   if (vw_get_message(msg, &msgLen))            // nếu có tín hiệu được truyền đến
   {
-    Serial.print("got: ");
-    Serial.write(msg[0]);
-    char signal = msg[0];
+   char signal = msg[0];
+//   Serial.println(signal);
+//  signal=msg[1];
+//   Serial.println(signal);
     Executed(signal);
-
+delay(100);
   }
+  
 
 
 }
