@@ -1,4 +1,4 @@
-
+  
 
 #include <VirtualWire.h>
 #include <UTFT.h>
@@ -12,7 +12,14 @@ SoftwareSerial espSerial =  SoftwareSerial(0, 1);
 
 
 //#include <DHT.h>d
-
+#define WHITE   0x0000 
+#define YELLOW    0x001F
+#define CYAN     0xF800 
+#define PINK   0x07E0 
+#define RED    0x07FF
+#define GREEN 0xF81F 
+#define BLUE  0xFFE0 
+#define BLACK   0xFFFF 
 #define DHTPIN 2
 //#define DHTTYPE DHT11
 //DHT dht(DHTPIN, DHTTYPE);
@@ -521,12 +528,14 @@ void drawScreen()
       //      delay(3000);
 
     }
-
-
-
-
   }
 }
+
+
+/*FlappyBird*/
+
+
+
 void homeScreen()
 {
 
