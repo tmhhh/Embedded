@@ -1,0 +1,82 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>Temperature: <span id="temp"></span> </div>
+    <div>Humidity: <span id="humidity" ></span> </div>
+  </body>
+  <!-- <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-database.js"></script>
+  
+  <script>
+    var firebaseConfig = {
+      apiKey: "bLdOolfNx0e85inULDVtM6cEs0X0oYmOZG4RTls9",
+      authDomain: "embedded-f7e4b-default-rtdb.firebaseapp.com",
+      databaseURL: "https://embedded-f7e4b-default-rtdb.firebaseio.com",
+      projectId: "embedded-f7e4b-default-rtdb",
+      storageBucket: "embedded-f7e4b-default-rtdb.appspot.com",
+      messagingSenderId: "862308439185",
+      // appId: "1:651418762105:web:89ff5d1b94de5a25ef4da8",
+      // measurementId: "G-3NE8J78W1Q",
+    };
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+    var firebaseRef = firebase.database().ref("do am");
+    firebaseRef.on("value", function (snapshot) {
+      var data9 = snapshot.val();
+      console.log(data9);
+      document.querySelector("#humidity").innerHTML = `
+			<div>${data9} °C</div>
+			`;
+    });
+    var firebaseRef = firebase.database().ref("nhiet do");
+    firebaseRef.on("value", function (snapshot) {
+      var data9 = snapshot.val();
+      console.log(data9);
+      document.querySelector("#temp").innerHTML = `
+			<div>${data9} °C</div>
+			`;
+    });
+  </script> -->
+
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js"></script>
+
+<script>
+ 
+  var firebaseConfig = {
+    apiKey: "AIzaSyA5Rh614BKpgXwSGFqo10TqdGiLhO0XwhE",
+    authDomain: "embedded-f7e4b.firebaseapp.com",
+    databaseURL: "https://embedded-f7e4b-default-rtdb.firebaseio.com",
+    projectId: "embedded-f7e4b",
+    storageBucket: "embedded-f7e4b.appspot.com",
+    messagingSenderId: "862308439185",
+    appId: "1:862308439185:web:a944b05b6f446edd0b9b30",
+    measurementId: "G-D0HKR18GJM"
+  };
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+  var firebaseRef = firebase.database().ref("do am");
+    firebaseRef.on("value", function (snapshot) {
+      var data9 = snapshot.val();
+      console.log(data9);
+      document.querySelector("#humidity").innerHTML = `
+			<span>${data9} </span>
+			`;
+    });
+    var firebaseRef = firebase.database().ref("nhiet do");
+    firebaseRef.on("value", function (snapshot) {
+      var data9 = snapshot.val();
+      console.log(data9);
+      document.querySelector("#temp").innerHTML = `
+			<span>${data9} °C</span>
+			`;
+    });
+</script>
+</html>
