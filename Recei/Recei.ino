@@ -150,10 +150,14 @@ void Executed(char msg)
   if (msg == '1')
   {
     rotateLeft();
+    delay(300);
+    Stop();
   }
   else if (msg == '2')
   {
     rotateRight();
+    delay(300);
+    Stop();
   }
   else if (msg == '3')
   {
