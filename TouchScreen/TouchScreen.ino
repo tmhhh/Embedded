@@ -30,7 +30,17 @@ extern uint8_t BigFont[];
 int color = 0;
 word colorlist[] = {VGA_WHITE, VGA_BLACK, VGA_RED, VGA_BLUE, VGA_GREEN, VGA_FUCHSIA, VGA_YELLOW, VGA_AQUA};
 int  bsize = 4;
-
+//
+void multiSend(char signal[])
+{
+  int i = 0;
+  while (i <= 3)
+  {
+    vw_send((byte *)signal, sizeof(signal));// gửi tín hiệu đi
+    vw_wait_tx();
+    i++;
+  }
+}
 void send(char signal[])
 {
   vw_send((byte *)signal, sizeof(signal));// gửi tín hiệu đi
@@ -107,7 +117,7 @@ void carSetup() {
 
 void carController() {
   long x, y;
-  char signal[20] = "";
+  char signal[1] = "";
 
   while (myTouch.dataAvailable() == true || true )
   {
@@ -188,11 +198,17 @@ void carController() {
       }
       Serial.print("sent: ");
       Serial.println(signal);
-      //      signal[0] = '0';
-      //      send(signal);
-      delay(100);
+      //      delay(100);
 
+    }
+    else
+    {
+      signal[0] = '0';
+      send(signal);
+      Serial.print("sent: ");
+      Serial.println(signal);
       Clear();
+
     }
   }
 }
@@ -264,7 +280,8 @@ void drawScreen2()
   long secondY;
   bool check = false;
   bool check2 = false;
-  char signal[20] = "";
+  char signal[100] = "";
+  int count = 0;
   char direct;
   char oldDirect = 'b';
 
@@ -272,6 +289,7 @@ void drawScreen2()
 
   while (myTouch.dataAvailable() == true || true)
   {
+
     firstX = secondX;
     firstY = secondY;
     myTouch.read();
@@ -289,7 +307,7 @@ void drawScreen2()
         myGLCD.clrScr();
 
         signal[0] = '7';
-        send(signal);
+        multiSend(signal);
         Serial.println("send: 7");
         break;
       }
@@ -315,9 +333,11 @@ void drawScreen2()
       long y = secondY - firstY;
       if (direct == 'u')
       {
+
         Serial.println('3');
-        signal[0] = '3';
-        send(signal);
+        signal[count] = '3';
+        count++;
+        //        send(signal);
       }
       else
         switch (oldDirect) {
@@ -326,24 +346,30 @@ void drawScreen2()
             {
               case 'b':
                 Serial.println('2');
-                signal[0] = '2';
-                send(signal);
-                Serial.println('3');
-                signal[0] = '3';
-                send(signal);
+                signal[count] = '2';
+
+                count++;
+                //                send(signal);
+                //                Serial.println('3');
+                //                signal[count] = '3';
+                //                count++;
+                //                send(signal);
                 break;
               case 'n':
                 Serial.println('1');
-                signal[0] = '1';
-                send(signal);
-                Serial.println('3');
-                signal[0] = '3';
-                send(signal);
+                signal[count] = '1';
+                count++;
+                //                send(signal);
+                //                Serial.println('3');
+                //                signal[count] = '3';
+                //                count++;
+                //                send(signal);
                 break;
               case 'd':
                 Serial.println('3');
-                signal[0] = '3';
-                send(signal);
+                signal[count] = '3';
+                count++;
+                //                send(signal);
                 break;
 
             }
@@ -354,24 +380,29 @@ void drawScreen2()
             {
               case 'n':
                 Serial.println('2');
-                signal[0] = '2';
-                send(signal);
-                Serial.println('3');
-                signal[0] = '3';
-                send(signal);
+                signal[count] = '2';
+                count++;
+                //                send(signal);
+                //                Serial.println('3');
+                //                signal[count] = '3';
+                //                //                send(signal);
+                //                count++;
                 break;
               case 'b':
                 Serial.println('1');
-                signal[0] = '1';
-                send(signal);
-                Serial.println('3');
-                signal[0] = '3';
-                send(signal);
+                signal[count] = '1';
+                count++;
+                //                send(signal);
+                //                Serial.println('3');
+                //                signal[count] = '3';
+                //                count++;
+                //                //                send(signal);
                 break;
               case 't':
                 Serial.println('3');
-                signal[0] = '3';
-                send(signal);
+                signal[count] = '3';
+                count++;
+                //                send(signal);
                 break;
 
             }
@@ -381,24 +412,29 @@ void drawScreen2()
             {
               case 'd':
                 Serial.println('2');
-                signal[0] = '2';
-                send(signal);
-                Serial.println('3');
-                signal[0] = '3';
-                send(signal);
+                signal[count] = '2';
+                count++;
+                //                send(signal);
+                //                Serial.println('3');
+                //                signal[count] = '3';
+                //                count++;
+                //                //                send(signal);
                 break;
               case 't':
                 Serial.println('1');
-                signal[0] = '1';
-                send(signal);
-                Serial.println('3');
-                signal[0] = '3';
-                send(signal);
+                signal[count] = '1';
+                count++;
+                //                //                send(signal);
+                //                Serial.println('3');
+                //                signal[count] = '3';
+                //                count++;
+                //                //                send(signal);
                 break;
               case 'n':
                 Serial.println('3');
-                signal[0] = '3';
-                send(signal);
+                signal[count] = '3';
+                //                send(signal);
+                count++;
                 break;
             }
 
@@ -411,24 +447,30 @@ void drawScreen2()
             {
               case 't':
                 Serial.println('2');
-                signal[0] = '2';
-                send(signal);
-                Serial.println('3');
-                signal[0] = '3';
-                send(signal);
+                signal[count] = '2';
+                //                send(signal);
+                count++;
+                //                Serial.println('3');
+                //                signal[count] = '3';
+                //                count++;
+                //                //                send(signal);
                 break;
               case 'd':
                 Serial.println('1');
-                signal[0] = '1';
-                send(signal);
-                Serial.println('3');
-                signal[0] = '3';
-                send(signal);
+                signal[count] = '1';
+                //                send(signal);
+                count++;
+                //                Serial.println('3');
+                //                signal[count] = '3';
+                //                //                send(signal);
+                //                count++;
                 break;
               case 'b':
                 Serial.println('3');
-                signal[0] = '3';
-                send(signal);
+                signal[count] = '3';
+                Serial.println(signal[count]);
+                //                send(signal);
+                count++;
                 break;
             }
             break;
@@ -447,11 +489,29 @@ void drawScreen2()
     {
       if (check)
       {
+        char a[1];
+        for (int i = 0; i < count; i++)
+        {
+          Serial.print("sent**:");
+          Serial.println(signal[i]);
+
+          a[0] = signal[i];
+          send(a);
+          delay(3000);
+          if (i ==count - 1)
+          {
+            a[0] = '0';
+            Serial.print("sent**:");
+            Serial.println(a[0]);
+            send(a);
+          }
+        }
+
         myGLCD.clrScr();
         drawMatrix(6);
         check = false;
         oldDirect = 'b';
-        //        check2 = false;
+        count = 0;
       }
 
     }
@@ -463,6 +523,7 @@ void drawScreen2()
 
   }
 }
+<<<<<<< HEAD
 void drawScreen()
 {
   drawMatrix(6);
@@ -536,6 +597,79 @@ void drawScreen()
 
 
 
+=======
+//void drawScreen()
+//{
+//  drawMatrix(6);
+//  while (myTouch.dataAvailable() == true || true)
+//  {
+//    myTouch.read();
+//    long x = myTouch.getX();
+//    long y = myTouch.getY();
+//    Serial.print("BeginX: ");
+//    Serial.println(x);
+//    Serial.print("BeginY: ");
+//    Serial.println(y);
+//    Serial.println("--------------------------------");
+//    //    delay(2000);
+//
+//    if (x != -1 && y != -1)
+//    {
+//      if (x >= 0 && x <= 10 && y >= 0 && y <= 20)
+//      {
+//        myGLCD.clrScr();
+//        char signal[20] = "";
+//        signal[0] = '7';
+//        myGLCD.clrScr();
+//        send(signal);
+//        Serial.println("send: 7");
+//        break;
+//      }
+//
+//      myGLCD.setColor(colorlist[4]);
+//      myGLCD.fillCircle(x, y, 2);
+//      long firstX = x;
+//      long firstY = y;
+//      long secondX;
+//      long secondY;
+//      while (myTouch.dataAvailable() == true || true)
+//      {
+//        myTouch.read();
+//        secondX = myTouch.getX();
+//        secondY = myTouch.getY();
+//        Serial.print("secondX: ");
+//        Serial.println(secondX);
+//        Serial.print("secondY: ");
+//        Serial.println(secondY);
+//        Serial.println("--------------------------------");
+//        //        delay(2000);
+//        if (secondX != firstX && secondY != firstY && secondX != -1 && secondY != -1)
+//        {
+//          myGLCD.fillCircle(secondX, secondY, 2);
+//
+//          break;
+//        }
+//      }
+//      Serial.print("FirstX: ");
+//      Serial.println(firstX);
+//      Serial.print("FirstY: ");
+//      Serial.println(firstY);
+//      Serial.println("--------------------------------");
+//
+//
+//      //
+//      myGLCD.drawLine(firstX, firstY, secondX, secondY);
+//
+//      //      delay(3000);
+//
+//    }
+//
+//
+//
+//
+//  }
+//}
+>>>>>>> faa036c3c7472108e3a80bb7591f36bdd5769535
 void homeScreen()
 {
 
@@ -588,11 +722,8 @@ void setup()
   vw_set_ptt_inverted(true);
   vw_setup(1024);
   vw_set_tx_pin(8);
-
 }
 void loop()
 {
   homeScreen();
-
-
 }
