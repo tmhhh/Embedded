@@ -1,0 +1,10 @@
+C:\Users\Dell\source\repos\Temp-Humid\bin\Debug\Temp-Humid.exe.config
+C:\Users\Dell\source\repos\Temp-Humid\bin\Debug\Temp-Humid.exe
+C:\Users\Dell\source\repos\Temp-Humid\bin\Debug\Temp-Humid.pdb
+C:\Users\Dell\source\repos\Temp-Humid\obj\Debug\Temp-Humid.csprojAssemblyReference.cache
+C:\Users\Dell\source\repos\Temp-Humid\obj\Debug\Temp_Humid.Form1.resources
+C:\Users\Dell\source\repos\Temp-Humid\obj\Debug\Temp_Humid.Properties.Resources.resources
+C:\Users\Dell\source\repos\Temp-Humid\obj\Debug\Temp-Humid.csproj.GenerateResource.cache
+C:\Users\Dell\source\repos\Temp-Humid\obj\Debug\Temp-Humid.csproj.CoreCompileInputs.cache
+C:\Users\Dell\source\repos\Temp-Humid\obj\Debug\Temp-Humid.exe
+C:\Users\Dell\source\repos\Temp-Humid\obj\Debug\Temp-Humid.pdb
